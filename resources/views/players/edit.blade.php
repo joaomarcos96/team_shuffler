@@ -63,8 +63,7 @@
                     type="checkbox"
                     class="custom-control-input"
                     name="goalkeeper"
-                    id="goalkeeper"
-                    value="true">
+                    id="goalkeeper">
                 <label class="custom-control-label" for="goalkeeper">
                     Is goalkeeper?
                 </label>

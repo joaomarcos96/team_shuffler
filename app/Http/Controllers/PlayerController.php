@@ -93,8 +93,10 @@ class PlayerController extends Controller
      */
     private function handleGoalkeeperField(Request $request)
     {
+        $goalkeeperValues = ['on', true, 'true', 1, '1'];
+
         $request->merge([
-            'goalkeeper' => $request->get('goalkeeper') == 'on'
+            'goalkeeper' => in_array($request->get('goalkeeper'), $goalkeeperValues)
         ]);
     }
 }

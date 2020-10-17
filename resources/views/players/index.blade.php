@@ -7,9 +7,9 @@
     <div class="col-12">
         <h2 style="float: left; margin-right: 40px;">Team Shuffler</h2>
         @if (count($players))
-        <a class="btn btn-info" href="#">
+        <button class="btn btn-info" data-toggle="modal" data-target="#shuffle-modal">
             Shuffle
-        </a>
+        </button>
         @endif
         <a class="btn btn-success" href="{{ route('players.create') }}">
             Add player
@@ -43,6 +43,29 @@
     </tr>
     @endforeach
 </table>
+<div class="modal" id="shuffle-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm players to shuffle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @foreach ($players as $player)
+                <p>
+                    {{ $player->name }}, Level {{ $player->level }}{{ $player->goalkeeper ? ', Goalkeeper' : '' }}
+                </p>
+                @endforeach
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Shuffle</button>
+            </div>
+        </div>
+    </div>
+</div>
 @else
 <p>Add players to shuffle</p>
 @endif

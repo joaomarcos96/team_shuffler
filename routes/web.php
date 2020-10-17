@@ -3,4 +3,4 @@
 use App\Http\Controllers\PlayerController;
 use Illuminate\Support\Facades\Route;
 
-Route::resource('players', PlayerController::class);
+Route::resource('players', PlayerController::class)->except(['show']);

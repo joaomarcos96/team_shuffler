@@ -63,7 +63,10 @@
                     type="checkbox"
                     class="custom-control-input"
                     name="goalkeeper"
-                    id="goalkeeper">
+                    id="goalkeeper"
+                    @if ($player->goalkeeper)
+                        checked
+                    @endif>
                 <label class="custom-control-label" for="goalkeeper">
                     Is goalkeeper?
                 </label>

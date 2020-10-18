@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@push('scripts')
+    <script src="{{ asset('js/players.js') }}"></script>
+@endpush
+
 @section('title', 'Players')
 
 @section('content')
@@ -46,23 +50,39 @@
 <div class="modal" id="shuffle-modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Confirm players to shuffle</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                @foreach ($players as $player)
-                <p>
-                    {{ $player->name }}, Level {{ $player->level }}{{ $player->goalkeeper ? ', Goalkeeper' : '' }}
-                </p>
-                @endforeach
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Shuffle</button>
-            </div>
+            <form action="{{ route('teams.store') }}" method="POST">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm players to shuffle</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="select-all">
+                        <label class="form-check-label" for="select-all">
+                            Select all
+                        </label>
+                    </div>
+                    @foreach ($players as $player)
+                    <div class="form-check">
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            name="confirm[{{ $player->id }}]"
+                            id="confirm[{{ $player->id }}]">
+                        <label class="form-check-label" for="confirm[{{ $player->id }}]">
+                            {{ $player->name }}, Level {{ $player->level }}{{ $player->goalkeeper ? ', Goalkeeper' : '' }}
+                        </label>
+                    </div>
+                    @endforeach
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Shuffle</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

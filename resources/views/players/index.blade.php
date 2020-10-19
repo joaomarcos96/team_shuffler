@@ -26,13 +26,16 @@
 @if (count($players))
 <table class="table table-bordered">
     <tr>
+        <th>#</th>
         <th>Name</th>
         <th>Level</th>
         <th>Goalkeeper</th>
         <th>Action</th>
     </tr>
+    @php $i = 1 @endphp
     @foreach ($players as $player)
     <tr>
+        <td>{{ $i++ }}</td>
         <td>{{ $player->name }}</td>
         <td>{{ $player->level }}</td>
         <td>{{ $player->goalkeeper ? 'Yes' : 'No' }}</td>
@@ -77,6 +80,17 @@
                         </label>
                     </div>
                     @endforeach
+                    <br>
+                    <div class="row">
+                        <div class="col-8">
+                            <input
+                                type="number"
+                                name="players-per-team"
+                                class="form-control"
+                                placeholder="Number of players per team"
+                                required>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

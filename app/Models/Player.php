@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -35,4 +36,15 @@ class Player extends Model
         'level' => 'required|between:1,5|integer',
         'goalkeeper' => 'nullable|boolean'
     ];
+
+    /**
+     * @param array $confirmedPlayersId
+     * @return Collection
+     */
+    public static function getConfirmedPlayers($confirmedPlayersId)
+    {
+        return self::whereIn('id', $confirmedPlayersId)
+            ->orderBy('level', 'ASC')
+            ->get();
+    }
 }

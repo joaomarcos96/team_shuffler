@@ -107,23 +107,45 @@ class TeamController extends Controller
                 while ($teamIndex < count($teams) && count($teams[$teamIndex]) >= $numberOfPlayersPerTeam) {
                     $teamIndex++;
                 }
-                $teams[$teamIndex][] = $outfieldPlayersArray[$i];;
+                $teams[$teamIndex][] = $outfieldPlayersArray[$i];
             }
 
             unset($outfieldPlayersArray[$i]);
         }
 
-        // for ($i = $numberOfTeams - 2; $i >= 0; $i--) {
-        //     $lastTeam = $teams[$numberOfTeams - 1];
+        for ($i = $numberOfTeams - 2; $i >= 0; $i--) {
+            $lastTeam = $teams[$numberOfTeams - 1];
 
-        //     $removedFirstPlayerOfTheLastTeam = $lastTeam[0];
+            if (empty($teams[$i]) || count($teams[$i]) < $numberOfPlayersPerTeam) {
+                if ($lastTeam[0]['goalkeeper'] && count($lastTeam) > 0) {
+                    $teams[$i][] = $lastTeam[1];
+                    $this->removePlayerFromTeam($teams, $numberOfTeams, 1);
+                } else if (!$lastTeam[0]['goalkeeper']) {
+                    $teams[$i][] = $lastTeam[0];
+                    $this->removePlayerFromTeam($teams, $numberOfTeams, 0);
+                }
+            } else {
+                $teamIndex = $i - 1;
+                while ($teamIndex >= 0 && count($teams[$teamIndex]) >= $numberOfPlayersPerTeam) {
+                    $teamIndex++;
+                }
+                if ($teamIndex >= 0) {
+                    if ($lastTeam[0]['goalkeeper'] && count($lastTeam) > 0) {
+                        $teams[$teamIndex][] = $lastTeam[1];
+                        $this->removePlayerFromTeam($teams, $numberOfTeams, 1);
+                    } else if (!$lastTeam[0]['goalkeeper']) {
+                        $teams[$teamIndex][] = $lastTeam[0];
+                        $this->removePlayerFromTeam($teams, $numberOfTeams, 0);
+                    }
+                }
+            }
+        }
+    }
 
-        //     unset($lastTeam[0]);
-
-        //     if (count($teams[$i]) < $numberOfPlayersPerTeam) {
-        //         $teams[$i][] = $removedFirstPlayerOfTheLastTeam;
-        //     }
-        // }
+    private function removePlayerFromTeam(array &$teams, int $numberOfTeams, int $indexToRemove)
+    {
+        unset($teams[$numberOfTeams - 1][$indexToRemove]);
+        $teams[$numberOfTeams - 1] = array_values($teams[$numberOfTeams - 1]);
     }
 
     private function getNumberOfTeams(

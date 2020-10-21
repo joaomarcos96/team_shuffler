@@ -59,7 +59,7 @@ class TeamController extends Controller
 
         $this->assignOutfieldPlayersToTeams($outfieldPlayers, $teams, $numberOfPlayersPerTeam);
 
-        return view('teams/created_team', compact('teams'));
+        return view('teams/index', compact('teams'));
     }
 
     private function assignGoalkeepersToTeams(Collection $goalkeepers, int $numberOfTeams): array

@@ -59,9 +59,7 @@ class TeamController extends Controller
 
         $this->assignOutfieldPlayersToTeams($outfieldPlayers, $teams, $numberOfPlayersPerTeam);
 
-        dd($teams);
-
-        return Redirect::route('players.index');
+        return view('teams/created_team', compact('teams'));
     }
 
     private function assignGoalkeepersToTeams(Collection $goalkeepers, int $numberOfTeams): array
@@ -126,7 +124,11 @@ class TeamController extends Controller
                 }
             } else {
                 $teamIndex = $i - 1;
-                while ($teamIndex >= 0 && count($teams[$teamIndex]) >= $numberOfPlayersPerTeam) {
+                while (
+                    $teamIndex >= 0
+                    && !empty($teams[$teamIndex])
+                    && count($teams[$teamIndex]) >= $numberOfPlayersPerTeam
+                ) {
                     $teamIndex++;
                 }
                 if ($teamIndex >= 0) {

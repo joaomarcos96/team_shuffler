@@ -96,7 +96,7 @@ class PlayerController extends Controller
         $goalkeeperValues = ['on', true, 'true', 1, '1'];
 
         $request->merge([
-            'goalkeeper' => in_array($request->get('goalkeeper'), $goalkeeperValues)
+            'goalkeeper' => in_array(request('goalkeeper'), $goalkeeperValues)
         ]);
     }
 }

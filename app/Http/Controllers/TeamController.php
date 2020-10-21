@@ -66,7 +66,7 @@ class TeamController extends Controller
     {
         $teams = array_fill(0, $numberOfTeams, null);
 
-        $goalkeepersGroupedByLevel = $goalkeepers->groupBy('level');
+        $goalkeepersGroupedByLevel = $goalkeepers->groupBy('level')->sortKeysDesc();
 
         $shuffledGoalkeepers = ArrayUtils::shuffleEveryElement($goalkeepersGroupedByLevel->toArray());
 
@@ -131,7 +131,7 @@ class TeamController extends Controller
                 ) {
                     $teamIndex++;
                 }
-                if ($teamIndex >= 0) {
+                if ($teamIndex >= 0 && $teamIndex < count($teams)) {
                     if ($lastTeam[0]['goalkeeper'] && count($lastTeam) > 0) {
                         $teams[$teamIndex][] = $lastTeam[1];
                         $this->removePlayerFromTeam($teams, $numberOfTeams, 1);

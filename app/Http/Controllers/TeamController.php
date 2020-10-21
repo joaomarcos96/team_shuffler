@@ -59,6 +59,12 @@ class TeamController extends Controller
 
         $this->assignOutfieldPlayersToTeams($outfieldPlayers, $teams, $numberOfPlayersPerTeam);
 
+        for ($i = 0; $i < count($teams); $i++) {
+            if (empty($teams[$i])) {
+                unset($teams[$i]);
+            }
+        }
+
         return view('teams/index', compact('teams'));
     }
 
@@ -102,7 +108,11 @@ class TeamController extends Controller
                 $teams[$i % $numberOfTeams][] = $outfieldPlayersArray[$i];
             } else {
                 $teamIndex = 0;
-                while ($teamIndex < count($teams) && count($teams[$teamIndex]) >= $numberOfPlayersPerTeam) {
+                while (
+                    $teamIndex < count($teams)
+                    && !empty($team[$teamIndex])
+                    && count($teams[$teamIndex]) >= $numberOfPlayersPerTeam
+                ) {
                     $teamIndex++;
                 }
                 $teams[$teamIndex][] = $outfieldPlayersArray[$i];
@@ -114,30 +124,32 @@ class TeamController extends Controller
         for ($i = $numberOfTeams - 2; $i >= 0; $i--) {
             $lastTeam = $teams[$numberOfTeams - 1];
 
-            if (empty($teams[$i]) || count($teams[$i]) < $numberOfPlayersPerTeam) {
-                if ($lastTeam[0]['goalkeeper'] && count($lastTeam) > 0) {
-                    $teams[$i][] = $lastTeam[1];
-                    $this->removePlayerFromTeam($teams, $numberOfTeams, 1);
-                } else if (!$lastTeam[0]['goalkeeper']) {
-                    $teams[$i][] = $lastTeam[0];
-                    $this->removePlayerFromTeam($teams, $numberOfTeams, 0);
-                }
-            } else {
-                $teamIndex = $i - 1;
-                while (
-                    $teamIndex >= 0
-                    && !empty($teams[$teamIndex])
-                    && count($teams[$teamIndex]) >= $numberOfPlayersPerTeam
-                ) {
-                    $teamIndex++;
-                }
-                if ($teamIndex >= 0 && $teamIndex < count($teams)) {
+            if (!empty($lastTeam)) {
+                if (empty($teams[$i]) || count($teams[$i]) < $numberOfPlayersPerTeam) {
                     if ($lastTeam[0]['goalkeeper'] && count($lastTeam) > 0) {
-                        $teams[$teamIndex][] = $lastTeam[1];
+                        $teams[$i][] = $lastTeam[1];
                         $this->removePlayerFromTeam($teams, $numberOfTeams, 1);
                     } else if (!$lastTeam[0]['goalkeeper']) {
-                        $teams[$teamIndex][] = $lastTeam[0];
+                        $teams[$i][] = $lastTeam[0];
                         $this->removePlayerFromTeam($teams, $numberOfTeams, 0);
+                    }
+                } else {
+                    $teamIndex = $i - 1;
+                    while (
+                        $teamIndex >= 0
+                        && !empty($teams[$teamIndex])
+                        && count($teams[$teamIndex]) >= $numberOfPlayersPerTeam
+                    ) {
+                        $teamIndex++;
+                    }
+                    if ($teamIndex >= 0 && $teamIndex < count($teams)) {
+                        if ($lastTeam[0]['goalkeeper'] && count($lastTeam) > 0) {
+                            $teams[$teamIndex][] = $lastTeam[1];
+                            $this->removePlayerFromTeam($teams, $numberOfTeams, 1);
+                        } else if (!$lastTeam[0]['goalkeeper']) {
+                            $teams[$teamIndex][] = $lastTeam[0];
+                            $this->removePlayerFromTeam($teams, $numberOfTeams, 0);
+                        }
                     }
                 }
             }

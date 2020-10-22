@@ -59,11 +59,7 @@ class TeamController extends Controller
 
         $this->assignOutfieldPlayersToTeams($outfieldPlayers, $teams, $numberOfPlayersPerTeam);
 
-        for ($i = 0; $i < count($teams); $i++) {
-            if (empty($teams[$i])) {
-                unset($teams[$i]);
-            }
-        }
+        $this->unsetInvalidTeams($teams);
 
         return view('teams/index', compact('teams'));
     }
@@ -110,12 +106,14 @@ class TeamController extends Controller
                 $teamIndex = 0;
                 while (
                     $teamIndex < count($teams)
-                    && !empty($team[$teamIndex])
+                    && !empty($teams[$teamIndex])
                     && count($teams[$teamIndex]) >= $numberOfPlayersPerTeam
                 ) {
                     $teamIndex++;
                 }
-                $teams[$teamIndex][] = $outfieldPlayersArray[$i];
+                if ($teamIndex >= 0 && $teamIndex < count($teams)) {
+                    $teams[$teamIndex][] = $outfieldPlayersArray[$i];
+                }
             }
 
             unset($outfieldPlayersArray[$i]);
@@ -176,5 +174,14 @@ class TeamController extends Controller
         }
 
         return $numberOfTeams;
+    }
+
+    private function unsetInvalidTeams(array &$teams)
+    {
+        for ($i = 0; $i < count($teams); $i++) {
+            if (empty($teams[$i])) {
+                unset($teams[$i]);
+            }
+        }
     }
 }

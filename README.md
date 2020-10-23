@@ -6,15 +6,15 @@ Team Shuffler helps you create players and shuffle them to create teams.
 
 Run the commands below to get the app up and running
 
-* Copy `.env.sample` to `.env` and fill it with your own credentials:
+* Copy `.env.example` to `.env` and fill it with your own credentials:
         
-        $ cp .env.sample .env
+        $ cp .env.example .env
 
 * Install the dependencies
 
         $ composer install
 
-* Setup the database
+* Migrate the database (create it first, it's not created yet)
 
         $ php artisan migrate
 
